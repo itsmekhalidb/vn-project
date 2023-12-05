@@ -1,24 +1,25 @@
-import openai
+from openai import OpenAI
 import os
 import sys
 import pandas as pd
 import time
+from dotenv import load_dotenv
 
-class AiTest():
-    openai.api_key = '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'
+load_dotenv()
 
-    def get_completion(self, prompt, model="gpt-3.5-turbo"):
-        messages = [{"role": "user", "content": prompt}]
-        response = openai.ChatCompletion.create(
-            model=model,
-            messages=messages,
-            temperature=0,
-        )
-        return response.choices[0].message["content"]
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
-def main(args):
-    test = AiTest()
-    print(test.get_completion("hi, how are you?"))
+client = OpenAI(
+    api_key=OPENAI_API_KEY,
+    )
 
-if __name__ == '__main__':
-    sys.exit(main(sys.argv[1:]))
+chat_completion = client.chat.completions.create(
+    messages=[
+        {
+            "role": "user",
+            "content": "Say this is a test",
+        }
+    ],
+    model="gpt-3.5-turbo",
+)
+print(chat_completion)
