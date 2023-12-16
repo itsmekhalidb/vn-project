@@ -37,12 +37,15 @@ def completion(messages, api_key="", proxy=''):
         comp_arr = []
         for letter in content:
             cnt += 1
-            if cnt > 150 and letter == " ":
+            if (cnt > 150 and letter == " ") or letter == "\n":
+                print(content[:cnt])
                 comp_arr.append(content[:cnt])
                 content = content[cnt:]
                 cnt = 0
+        comp_arr.append(content)
         messages.append(completion)
         result = [messages, comp_arr]
+        print(comp_arr)
         return result  # Return the updated messages list
     else:
         # If the status code is not 200, raise an exception with the error details
