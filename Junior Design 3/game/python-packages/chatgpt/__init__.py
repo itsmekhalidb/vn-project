@@ -31,8 +31,19 @@ def completion(messages, api_key="", proxy=''):
     if response.status_code == 200:
         # Extract the message from the response JSON and append it to the messages list
         completion = response.json()["choices"][0]["message"]
+        # create an array for larger texts and append it to the end of messages temporarily
+        content = completion["content"]
+        cnt = 0
+        comp_arr = []
+        for letter in content:
+            cnt += 1
+            if cnt > 150 and letter == " ":
+                comp_arr.append(content[:cnt])
+                content = content[cnt:]
+                cnt = 0
         messages.append(completion)
-        return messages  # Return the updated messages list
+        result = [messages, comp_arr]
+        return result  # Return the updated messages list
     else:
         # If the status code is not 200, raise an exception with the error details
         raise Exception(f"Error: {response.status_code}, {response.text}")

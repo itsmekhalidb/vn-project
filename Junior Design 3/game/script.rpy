@@ -2,36 +2,13 @@
     import os
     import chatgpt
 
-# define obama = Character("Obama")
-
-# # The game starts here.
-
-# label start:
-
-#     # Show a background. This uses a placeholder by default, but you can
-#     # add a file (named either "bg room.png" or "bg room.jpg") to the
-#     # images directory to show it.
-
-#     scene bg oval_office
-
-#     # This shows a character sprite. A placeholder is used, but you can
-#     # replace it by adding a file named "eileen happy.png" to the images
-#     # directory.
-
 #     show obama normal at truecenter
-#     obama "normal"
 
 #     show obama mad
-#     obama "mad"
 
 #     show obama confused
-#     obama "confused"
 
 #     show obama happy
-#     obama "happy"
-
-#     # This ends the game.
-#     return
 
 label start:
     python:
@@ -63,9 +40,11 @@ label start:
         messages.append(
             {"role": "user", "content": user_input}
         )
-        messages = chatgpt.completion(messages, apikey)
-        response = messages[-1]["content"]
-        obama("[response]")
+        temp = chatgpt.completion(messages, apikey)
+        messages = temp[0]
+        text = temp[1]
+        for r in text:
+            obama("[r]")
 
     # introduce scenario
     show obama mad at truecenter
@@ -73,13 +52,16 @@ label start:
         messages.append(
             {"role": "system", 
             "content": "You are hesitant but ready to reveal what the "
-            "threat is. After giving a short synopsis, ask the player if " +
-            "they would like to go to a meeting room where you can describe " +
-            "the threat in greater detail."}
+            "threat is. After giving a two sentence synopsis, ask the " +
+            "player if they would like to go to a meeting room where " +
+            "you can describe the threat in greater detail."}
         )
-        messages = chatgpt.completion(messages, apikey)
-        response = messages[-1]["content"]
-        obama("[response]")
+        temp = chatgpt.completion(messages, apikey)
+        messages = temp[0]
+        text = temp[1]
+        for r in text:
+            obama("[r]")
+
 
     # end game
     return
